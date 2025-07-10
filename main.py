@@ -66,4 +66,29 @@ def predict(data: dict):
     return {"survived": survived}
 
 
+# NUEVO: GET para /predict
+@app.get("/predict")
+def predict_get(
+    Pclass: int,
+    Sex: str,
+    Age: float,
+    Fare: float
+):
+    # Convierte Sex a numero, igual que en tu POST
+    sex_val = Sex.lower()
+    if sex_val == "male":
+        sex_num = 0
+    elif sex_val == "female":
+        sex_num = 1
+    else:
+        raise HTTPException(status_code=400,
+                            detail="Sex debe ser 'male' o 'female'")
+    
+    data = {
+        "Pclass": Pclass,
+        "Sex": sex_num,
+        "Age": Age,
+        "Fare": Fare
+    }
+    return run_prediction(data)
 
